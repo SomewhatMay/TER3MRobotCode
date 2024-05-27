@@ -15,20 +15,6 @@ static int clawSpeed = 0;
 static int clawPosition = 0;
 
 
-/* Robot Initializer */
-void initializeSystem() {
-	setDriveTrainSpeed(DRIVE_TRAIN_SPEED);
-	setDriveTrainAngle(DRIVE_TRAIN_ANGLE); // robot points north
-	stopDriveTrain();
-	setArmSpeed(ARM_SPEED);
-	setArmPosition(0);
-	stopArm()
-	setClawSpeed(CLAW_SPEED);
-	setClawPosition(0);
-	stopClaw();
-}
-
-
 /* DriveTrain Functions */
 void setDriveTrainSpeed(int speed) {
 	driveTrainSpeed = speed;
@@ -60,7 +46,7 @@ void stopArm() {
 
 /* Claw Functions */
 void setClawSpeed(int speed) {
-	clawSpeed = 0;
+	clawSpeed = speed;
 }
 
 void setClawPosition(int degrees) {
@@ -68,7 +54,7 @@ void setClawPosition(int degrees) {
 }
 
 void stopClaw() {
-	motor[claw] = 0;
+	motor[clawMotor] = 0;
 }
 
 
@@ -85,6 +71,19 @@ void resetSystem() {
 	setClawSpeed(0);
 }
 
+/* Robot Initializer */
+void initializeSystem() {
+	setDriveTrainSpeed(DRIVE_TRAIN_SPEED);
+	setDriveTrainAngle(DRIVE_TRAIN_ANGLE); // robot points north
+	stopDriveTrain();
+	setArmSpeed(ARM_SPEED);
+	setArmPosition(0);
+	stopArm();
+	setClawSpeed(CLAW_SPEED);
+	setClawPosition(0);
+	stopClaw();
+}
+
 
 /* Main Task Function */
 task main()
@@ -93,7 +92,8 @@ task main()
 
 	motor[leftMotor] = driveTrainSpeed;
 	motor[rightMotor] = -driveTrainSpeed;
-	wait1Msec(300);
+	wait1Msec(1000);
+
 
 	resetSystem();
 }
