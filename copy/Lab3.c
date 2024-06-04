@@ -19,14 +19,7 @@ task main()
 {
 	initializeSystem();
 
-	float delay = calculateTravelTime(100.0);
-	startDrivetrain();
-
-	wait1Msec(delay);
-	stopDriveTrain();
-
-	wait1Msec(450);
-
+	float delay = calculateTravelTime(200.0);
 	startDrivetrain();
 
 	wait1Msec(delay);

@@ -15,11 +15,11 @@
 
 
 #define DRIVE_TRAIN_SPEED 50
-#define SPEED_PER_SECOND 39 // At speed 50
+#define SPEED_PER_SECOND 39 //At speed 50
 #define DRIVE_TRAIN_ANGLE 90
 #define ARM_SPEED 20
 #define CLAW_SPEED 40
-#define COMPENSATION 1.19
+#define COMPENSATION 0.728
 
 
 static int driveTrainSpeed = 0;
@@ -45,8 +45,8 @@ void stopDriveTrain() {
 }
 
 void startDrivetrain(){
-	motor[leftMotor] = driveTrainSpeed * COMPENSATION;
-	motor[rightMotor] = driveTrainSpeed;
+	motor[leftMotor] = driveTrainSpeed;
+	motor[rightMotor] = driveTrainSpeed * COMPENSATION;
 
 }
 
@@ -54,7 +54,7 @@ void startDrivetrain(){
 // return is in milliseconds
 float calculateTravelTime(float dist) {
 	float distIn1Sec = 91.1753 * (log(driveTrainSpeed + 5.15744) / log(10)) - 122.446;
-	return (dist / distIn1Sec) * 1000;
+	return (dist / distIn1Sec) * 1000 * 0.85;
 }
 
 
