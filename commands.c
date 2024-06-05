@@ -15,11 +15,14 @@
 
 
 #define DRIVE_TRAIN_SPEED 50
+#define DRIVE_TRAIN_FACTOR 0.89
 #define SPEED_PER_SECOND 39 // At speed 50
 #define DRIVE_TRAIN_ANGLE 90
 #define ARM_SPEED 20
 #define CLAW_SPEED 40
-#define COMPENSATION 1.19
+#define COMPENSATION 1.18
+#define TURN_SPEED 50
+#define TURN_CONSTANT 720 / TURN_SPEED
 
 
 static int driveTrainSpeed = 0;
@@ -29,6 +32,12 @@ static int armPosition = 0;
 static int clawSpeed = 0;
 static int clawPosition = 0;
 
+
+int sign(int x) {
+	if (x > 0) return 1;
+	if (x < 0) return -1;
+	return 0;
+}
 
 /* DriveTrain -0Functions */
 void setDriveTrainSpeed(int speed) {
@@ -54,8 +63,33 @@ void startDrivetrain(){
 // return is in milliseconds
 float calculateTravelTime(float dist) {
 	float distIn1Sec = 91.1753 * (log(driveTrainSpeed + 5.15744) / log(10)) - 122.446;
-	return (dist / distIn1Sec) * 1000;
+	return (dist / distIn1Sec) * 1000 * DRIVE_TRAIN_FACTOR;
 }
+
+// moves the robot
+void moveForward(int distance){
+		float time = calculateTravelTime(distance);
+
+		setDriveTrainSpeed(sign(distance) * abs(driveTrainSpeed));
+
+		startDrivetrain();
+		wait1Msec(time);
+		stopDriveTrain();
+}
+
+
+// turn
+void turn(int degrees){
+	// Negative sign ensures that we are moving
+	// counter-clockwise
+	short direction = -sign(degrees);
+	motor[rightMotor] = direction * -TURN_SPEED;
+	motor[leftMotor] = direction * TURN_SPEED;
+
+	wait1Msec(abs(degrees) * TURN_CONSTANT);
+	stopDriveTrain();
+}
+
 
 
 /* Arm Functions */

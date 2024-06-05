@@ -15,49 +15,14 @@
 
 #include "commands.c"
 
+
 task main()
 {
 	initializeSystem();
 
-	motor[armMotor] = armSpeed;
-	wait1Msec(300);
-	motor[armMotor]
-
-	float delay = calculateTravelTime(200.0);
-	startDrivetrain();
-	wait1Msec(delay);
-	stopDriveTrain();
-
-	motor[clawMotor] = clawSpeed;
+	turn(180);
 	wait1Msec(500);
-	motor[clawMotor] = 0;
-
-	delay = turn(180);
-	wait1Msec(delay);
-	stopDriveTrain();
-
-	delay = calculateTravelTime(200.0);
-	startDrivetrain();
-	wait1Msec(delay);
-	stopDriveTrain();
-
-	delay = turn(-180);
-	wait1Msec(delay);
-	stopDriveTrain();
-
-	delay = calculateTravelTime(10.0);
-	startDrivetrain();
-	wait1Msec(delay);
-	stopDriveTrain();
-
-	motor[clawMotor] = -clawSpeed;
-	wait1Msec(500);
-	motor[clawMotor] = 0;
-
-	setDriveTrainSpeed(-DRIVE_TRAIN_SPEED);
-	startDrivetrain();
-	wait1Msec(delay);
-	stopDriveTrain();
+	turn(-180);
 
 
 	resetSystem();
