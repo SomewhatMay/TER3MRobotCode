@@ -18,7 +18,6 @@
 task main()
 {
 	//Program begins, insert code within curly braces
-	//
 	motor[leftMotor] = 50;
 	motor[rightMotor] = 50;
 

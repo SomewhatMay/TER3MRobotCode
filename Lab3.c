@@ -19,29 +19,35 @@ task main()
 {
 	initializeSystem();
 
-
-	moveClaw(400);
-	moveArm(400);
-
+	openClaw();
 	moveForward(200);
+	closeClaw();
 
-
-	moveClaw(-400);
 	wait1Msec(200);
 
 	moveArm(400);
 
 	turn(180);
+	wait1Msec(200);
 
 	moveForward(200);
 
+	wait1Msec(200);
 	turn(180);
+	wait1Msec(200);
 
 	moveForward(10);
 
-	moveClaw(400);
+	moveArm(-400);
+	openClaw();
 
+	wait1Msec(200);
 	moveForward(-10);
 
+	wait1Msec(200);
+
+	closeClaw();
+	wait1Msec(200);
+	
 	resetSystem();
 }

@@ -15,14 +15,14 @@
 
 
 #define DRIVE_TRAIN_SPEED 50
-#define DRIVE_TRAIN_FACTOR 0.89
+#define DRIVE_TRAIN_FACTOR 0.95
 #define SPEED_PER_SECOND 39 // At speed 50
 #define DRIVE_TRAIN_ANGLE 90
 #define ARM_SPEED 50
 #define CLAW_SPEED 40
 #define COMPENSATION 1.205 // Left motor
 #define TURN_SPEED 50
-#define TURN_CONSTANT 720 / TURN_SPEED
+#define TURN_CONSTANT 680 / TURN_SPEED
 
 
 static int driveTrainSpeed = 0;
@@ -56,7 +56,6 @@ void stopDriveTrain() {
 void startDrivetrain(){
 	motor[leftMotor] = driveTrainSpeed * COMPENSATION;
 	motor[rightMotor] = driveTrainSpeed;
-
 }
 
 // dist is in cm
@@ -133,6 +132,14 @@ void moveClaw(int distance){
 	motor[clawMotor] = clawSpeed * sign(distance);
 	wait1Msec(abs(distance));
 	stopClaw();
+}
+
+void openClaw() {
+	moveClaw(1000);
+}
+
+void closeClaw() {
+	moveClaw(-1000);
 }
 
 
