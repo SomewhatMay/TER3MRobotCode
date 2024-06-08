@@ -15,39 +15,32 @@
 
 #include "commands.c"
 
-task main()
-{
-	initializeSystem();
+#define squareSize 25 // In centimeters
 
+task main() {
+	// Origin is top left. 
+	// Points are represented as (y, x)
+	
+	// Robot starting at (2, 1)
+
+	// Pick up object at (1, 0)
 	openClaw();
-	moveForward(200);
-	closeClaw();
+	moveForward(squareSize);
+	wait1Msec(350);
 
+	turnToPosition(-90);
+	moveForward(squareSize);
+	closeClaw();
 	wait1Msec(350);
 
 	moveArm(400);
-
-	turn(180);
 	wait1Msec(350);
 
-	moveForward(200);
-
-	wait1Msec(350);
-	turn(180);
+	turnToPosition(90);
 	wait1Msec(350);
 
-	moveForward(10);
-
-	moveArm(-400);
-	openClaw();
-
-	wait1Msec(350);
-	moveForward(-10);
-
+	moveForward(squareSize * 2);
 	wait1Msec(350);
 
-	closeClaw();
-	wait1Msec(200);
 	
-	resetSystem();
 }
