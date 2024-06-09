@@ -17,18 +17,22 @@
 /* Symbolic Constants */
 #define DRIVE_TRAIN_SPEED 50
 #define DRIVE_TRAIN_MULTIPLIER 0.95 // Linearly adjusts drivetrain delay
+#define MOTOR_COMPENSATION 1.205 // Applied to left motor asymmetry
 #define DRIVE_TRAIN_ANGLE 90 // Faces north - ASK MR MARIO
+#define TURN_RATIO 680
+
 #define ARM_SPEED 50
 #define CLAW_SPEED 40
-#define MOTOR_COMPENSATION 1.205 // Applied to left motor asymmetry
-#define TURN_RATIO 680
+
 #define SQUARE_SIZE 25 // in centimeters
-#define ROBOT_POSITION {2, 1}
+#define ROBOT_POSITION_X 1
+#define ROBOT_POSITION_Y 2
 
 /* Robot Properties */
 static int driveTrainSpeed = 0; // range: [-127, 127]
 static int driveTrainAngle = 0; // range: [0, 360)
-static int driveTrainPosition[] = ROBOT_POSITION
+static int robotPositionX = 0;
+static int robotPositionY = 0;
 
 static int armSpeed = 0;
 static int armPosition = 0;
@@ -96,6 +100,43 @@ void moveForward(int distance) {
 }
 
 
+void setRobotPosition(int x, int y) {
+	robotPositionX = x;
+	robotPositionY = y;
+}
+
+void moveToPosition(int x, int y) {
+	int xDifference = x - robotPositionX;
+	int yDifference = y - robotPositionY;
+	int xDirection = sign(xDifference);
+	int moveXFirst = 0;
+
+	if (xDirection == 1 && driveTrainAngle == 90 || xDirection == -1 && driveTrainAngle == 270) {
+		// we are already facing the right x direction
+		moveXFirst = 1;
+	}
+
+	if (moveXFirst) {
+		turnToPosition(xDirection * 90);
+		wait1Msec(350);
+		moveForward(abs(xDifference) * SQUARE_SIZE);
+		wait1Msec(350);
+	}
+
+	turnToPosition(yDifference * 90);
+	wait1Msec(350);
+	moveForward(abs(yDifference) * SQUARE_SIZE);
+
+	if (!moveXFirst) {
+		wait1Msec(350);
+		turnToPosition(xDirection * 90);
+		wait1Msec(350);
+		moveForward(abs(xDifference) * SQUARE_SIZE);
+	}
+
+	setRobotPosition(x, y);
+}
+
 /*
 	Relative to the current heading,
 	turn the robot degrees degrees with
@@ -125,6 +166,8 @@ void turn(int degrees) {
 */
 void turnToPosition(int degrees) {
 	degrees = degrees % 360;
+	if (degrees < 0) degrees += 360;
+	
 	int difference = degrees - driveTrainAngle;
 	turn(difference);
 }
@@ -207,12 +250,15 @@ void resetSystem() {
 
 /* Robot Initializer */
 void initializeSystem() {
+	setRobotPosition(ROBOT_POSITION_X, ROBOT_POSITION_Y);
 	setDriveTrainSpeed(DRIVE_TRAIN_SPEED);
 	setDriveTrainAngle(DRIVE_TRAIN_ANGLE); // robot points north
 	stopDriveTrain();
+
 	setArmSpeed(ARM_SPEED);
 	setArmPosition(0);
 	stopArm();
+
 	setClawSpeed(CLAW_SPEED);
 	setClawPosition(0);
 	stopClaw();

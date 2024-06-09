@@ -23,24 +23,45 @@ task main() {
 	
 	// Robot starting at (2, 1)
 
-	// Pick up object at (1, 0)
-	openClaw();
-	moveForward(squareSize);
-	wait1Msec(350);
+	int target[4][3] = {
+		{0, 1, 270},
+		{2, 1, 90},
+		{2, 0, 0},
+		{2, 2, 180}
+	};
 
-	turnToPosition(-90);
-	moveForward(squareSize);
-	closeClaw();
-	wait1Msec(350);
 
-	moveArm(400);
-	wait1Msec(350);
+	for (int i = 0; i < 3; i++) {
+		// Pick up the object
+		openClaw();
+		moveToPosition(target[i][0], target[i][1]);
+		wait1Msec(350);
+		turnToPosition(target[i][2]);
 
-	turnToPosition(90);
-	wait1Msec(350);
+		wait1Msec(350);
+		closeClaw();
 
-	moveForward(squareSize * 2);
-	wait1Msec(350);
+		wait1Msec(350);
 
-	
+		moveArm(400);
+
+		// Go to drop-off location
+		moveToPosition(target[i + 1][0], target[i + 1][1]);
+		wait1Msec(350);
+		turnToPosition(target[i + 1][2]);
+
+		moveForward(10);
+		moveArm(-400);
+
+		wait1Msec(350);
+		openClaw();
+		wait1Msec(350);
+
+		moveForward(-10);
+		closeClaw();
+
+		// Go to origin
+		moveToPosition(ROBOT_POSITION_X, ROBOT_POSITION_Y);
+		wait1Msec(350);
+	}
 }
