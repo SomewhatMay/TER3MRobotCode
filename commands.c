@@ -107,8 +107,9 @@ void setRobotPosition(int x, int y) {
 
 void moveToPosition(int x, int y) {
 	int xDifference = x - robotPositionX;
-	int yDifference = y - robotPositionY;
+	int yDifference = robotPositionY - y; // Since y starts at the top
 	int xDirection = sign(xDifference);
+	int yDirection = sign(yDifference);
 	int moveXFirst = 0;
 
 	if (xDirection == 1 && driveTrainAngle == 90 || xDirection == -1 && driveTrainAngle == 270) {
@@ -116,18 +117,20 @@ void moveToPosition(int x, int y) {
 		moveXFirst = 1;
 	}
 
-	if (moveXFirst) {
+	if (moveXFirst && xDirection != 0) {
 		turnToPosition(xDirection * 90);
 		wait1Msec(350);
 		moveForward(abs(xDifference) * SQUARE_SIZE);
 		wait1Msec(350);
 	}
 
-	turnToPosition(yDifference * 90);
-	wait1Msec(350);
-	moveForward(abs(yDifference) * SQUARE_SIZE);
+	if (yDirection != 0) {
+		turnToPosition(-(yDirection + 1) * 90);
+		wait1Msec(350);
+		moveForward(abs(yDifference) * SQUARE_SIZE);
+	}
 
-	if (!moveXFirst) {
+	if (!moveXFirst && xDirection != 0) {
 		wait1Msec(350);
 		turnToPosition(xDirection * 90);
 		wait1Msec(350);
@@ -166,7 +169,6 @@ void turn(int degrees) {
 */
 void turnToPosition(int degrees) {
 	degrees = degrees % 360;
-	if (degrees < 0) degrees += 360;
 	
 	int difference = degrees - driveTrainAngle;
 	turn(difference);
