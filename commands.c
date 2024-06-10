@@ -16,10 +16,10 @@
 
 /* Symbolic Constants */
 #define DRIVE_TRAIN_SPEED 50
-#define DRIVE_TRAIN_MULTIPLIER 0.95 // Linearly adjusts drivetrain delay
-#define MOTOR_COMPENSATION 1.205 // Applied to left motor asymmetry
+#define DRIVE_TRAIN_MULTIPLIER 1.03 // Linearly adjusts drivetrain delay
+#define MOTOR_COMPENSATION 1.14 // Applied to left motor asymmetry
 #define DRIVE_TRAIN_ANGLE 90 // Faces north - ASK MR MARIO
-#define TURN_RATIO 680
+#define TURN_RATIO 695
 
 #define ARM_SPEED 50
 #define CLAW_SPEED 40
@@ -74,8 +74,8 @@ void startDrivetrain() {
 }
 
 
-/* 
-	Calculate how many miliseconds the robot 
+/*
+	Calculate how many miliseconds the robot
 	will take to travel distance centimeters at
 	driveTrainSpeed speed.
 */
@@ -84,7 +84,7 @@ float calculateTravelTime(float distance) {
 	return (distance / distanceIn1Sec) * 1000 * DRIVE_TRAIN_MULTIPLIER;
 }
 
-/* 
+/*
 	Enable the drivetrain at driveTrainSpeed
 	speed and yield the code until it reaches
 	distance centimeters.
@@ -105,6 +105,46 @@ void setRobotPosition(int x, int y) {
 	robotPositionY = y;
 }
 
+/*
+	Relative to the current heading,
+	turn the robot degrees degrees with
+	motors running at driveTrainSpeed speed.
+
+	This function yields.
+*/
+void turn(int degrees) {
+	short direction = sign(degrees);
+	motor[rightMotor] = direction * -driveTrainSpeed;
+	motor[leftMotor] = direction * driveTrainSpeed;
+
+	wait1Msec(abs(degrees) * TURN_RATIO / driveTrainSpeed);
+	stopDriveTrain();
+
+	int newAngle = (driveTrainAngle + degrees) % 360;
+	if (newAngle < 0) newAngle += 360;
+
+	setDriveTrainAngle(newAngle);
+}
+
+/*
+	Reorient the robot to face degrees in
+	standard position with the range [0, 360).
+
+	This function yields.
+*/
+void turnToPosition(int degrees) {
+	degrees = degrees % 360;
+
+	int difference = degrees - driveTrainAngle;
+	turn(difference);
+}
+
+/*
+	Move the robot to position x, y in the smallest
+	amount of time.
+
+	This function yields.
+*/
 void moveToPosition(int x, int y) {
 	int xDifference = x - robotPositionX;
 	int yDifference = robotPositionY - y; // Since y starts at the top
@@ -140,40 +180,6 @@ void moveToPosition(int x, int y) {
 	setRobotPosition(x, y);
 }
 
-/*
-	Relative to the current heading,
-	turn the robot degrees degrees with
-	motors running at driveTrainSpeed speed.
-
-	This function yields.
-*/
-void turn(int degrees) {
-	short direction = sign(degrees);
-	motor[rightMotor] = direction * -driveTrainSpeed;
-	motor[leftMotor] = direction * driveTrainSpeed;
-
-	wait1Msec(abs(degrees) * driveTrainSpeed / TURN_RATIO);
-	stopDriveTrain();
-
-	int newAngle = (driveTrainAngle + degrees) % 360;
-	if (newAngle < 0) newAngle += 360;
-
-	setDriveTrainAngle(newAngle);
-}
-
-/*
-	Reorient the robot to face degrees in
-	standard position with the range [0, 360).
-
-	This function yields.
-*/
-void turnToPosition(int degrees) {
-	degrees = degrees % 360;
-	
-	int difference = degrees - driveTrainAngle;
-	turn(difference);
-}
- 
 
 /* Arm Functions */
 void setArmSpeed(int speed) {

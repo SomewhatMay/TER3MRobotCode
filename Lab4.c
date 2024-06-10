@@ -15,12 +15,10 @@
 
 #include "commands.c"
 
-#define squareSize 25 // In centimeters
-
 task main() {
-	// Origin is top left. 
+	// Origin is top left.
 	// Points are represented as (y, x)
-	
+
 	// Robot starting at (2, 1)
 
 	int target[4][3] = {
