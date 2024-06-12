@@ -19,15 +19,15 @@
 
 /* Symbolic Constants */
 #define DRIVE_TRAIN_SPEED 50
-#define DRIVE_TRAIN_MULTIPLIER 0.88 // Linearly adjusts drivetrain delay
-#define MOTOR_COMPENSATION 1.085 // Applied to left motor asymmetry
+#define DRIVE_TRAIN_MULTIPLIER 0.83 // Linearly adjusts drivetrain delay
+#define MOTOR_COMPENSATION 1.095 // Applied to left motor asymmetry
 #define DRIVE_TRAIN_ANGLE 90 // Faces north - ASK MR MARIO
-#define TURN_RATIO 627
+#define TURN_RATIO 570
 
 #define ARM_SPEED 50
 #define CLAW_SPEED 40
 
-#define SQUARE_SIZE 25 // in centimeters
+#define SQUARE_SIZE 37 // in centimeters
 #define ROBOT_POSITION_R 2
 #define ROBOT_POSITION_C 1
 
@@ -148,7 +148,7 @@ void turnToPosition(int degrees) {
 
 	This function yields.
 */
-void moveToPosition(int c, int r) {
+void _moveToPosition(int c, int r) {
 	int rDifference = robotPositionR - r; // Since row starts at the top
 	int cDifference = c - robotPositionC;
 	int rDirection = sign(rDifference);
@@ -161,26 +161,45 @@ void moveToPosition(int c, int r) {
 	}
 
 	if (moveXFirst && cDirection != 0) {
-		turnToPosition(cDirection * 90);
-		wait1Msec(350);
+		// turnToPosition(cDirection * 90);
+		// wait1Msec(350);
 		moveForward(abs(cDifference) * SQUARE_SIZE);
 		wait1Msec(350);
 	}
 
 	if (rDirection != 0) {
-		turnToPosition(-(rDirection + 1) * 90);
+		turnToPosition((rDirection + 1) * 90);
 		wait1Msec(350);
 		moveForward(abs(rDifference) * SQUARE_SIZE);
+		wait1Msec(350);
 	}
 
 	if (!moveXFirst && cDirection != 0) {
-		wait1Msec(350);
 		turnToPosition(cDirection * 90);
 		wait1Msec(350);
 		moveForward(abs(cDifference) * SQUARE_SIZE);
 	}
 
-	setRobotPosition(c, r);
+	setRobotPosition(r, c);
+}
+
+void moveToPosition(int row, int col) {
+	int rowDifference = robotPositionR - row;
+	int colDifference = col - robotPositionC;
+	
+	int horizontalDirection = sign(colDifference);
+	int verticalDirection = sign(rowDifference);
+
+	if (horizontalDirection != 0) {
+		turnToPosition(horizontalDirection * 90);
+		wait1Msec(350);
+		moveForward(abs(colDifference) * SQUARE_SIZE);
+		wait1Msec(350);
+	}
+
+	if (verticalDirection != 0) {
+		turnToPosition(verticalDirection )
+	}
 }
 
 

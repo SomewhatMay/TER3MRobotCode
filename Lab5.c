@@ -16,55 +16,22 @@
 #include "commands.c"
 
 task main() {
-	initializeSystem();
-
 	// Origin is top left.
 	// Points are represented as (y, x)
 
 	// Robot starting at (2, 1)
 
 	int target[4][3] = {
-		{1, 0, 270},
-		{1, 2, 90},
-		{0, 2, 0},
+		{0, 1, 270},
+		{2, 1, 90},
+		{2, 0, 0},
 		{2, 2, 180}
 	};
 
+	moveToPosition(1,1);
+	turnToPosition(270);
+	openClaw();
+	moveToPosition(1,0);
 
-	for (int i = 0; i < 3; i++) {
-		// Pick up the object
-		openClaw();
-		moveToPosition(target[i][0], target[i][1]);
-		wait1Msec(350);
-		turnToPosition(target[i][2]);
 
-		wait1Msec(350);
-		closeClaw();
-
-		wait1Msec(350);
-
-		moveArm(400);
-
-		// Go to drop-off location
-		moveToPosition(target[i + 1][0], target[i + 1][1]);
-		wait1Msec(350);
-		turnToPosition(target[i + 1][2]);
-
-		// moveForward(10);
-		moveArm(-400);
-
-		wait1Msec(350);
-		openClaw();
-		wait1Msec(350);
-
-		// moveForward(-10);
-
-		// Go to origin
-		moveToPosition(ROBOT_POSITION_R, ROBOT_POSITION_C);
-		turnToPosition(0);
-		closeClaw();
-		wait1Msec(350);
-	}
-
-	resetSystem();
 }
