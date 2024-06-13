@@ -20,9 +20,18 @@ task main()
 {
 	initializeSystem();
 
-	turn(180);
+	turnToPosition(90);
 	wait1Msec(500);
-	turn(-180);
+	turnToPosition(-90);
+	wait1Msec(500);
+	turnToPosition(0);
+	wait1Msec(500);
+	turnToPosition(180);
+	wait1Msec(500);
+	turnToPosition(0);
+	wait1Msec(500);
+	turnToPosition(-180);
+	wait1Msec(300);
 
 
 	resetSystem();

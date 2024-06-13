@@ -20,18 +20,54 @@ task main() {
 	// Points are represented as (y, x)
 
 	// Robot starting at (2, 1)
+	initializeSystem():
 
-	int target[4][3] = {
-		{0, 1, 270},
-		{2, 1, 90},
-		{2, 0, 0},
-		{2, 2, 180}
-	};
 
-	moveToPosition(1,1);
-	turnToPosition(270);
 	openClaw();
+
+	wait1Msec(350);
 	moveToPosition(1,0);
 
+	wait1Msec(350);
+	turnToPosition(90);
+
+	wait1Msec(350);
+	interact(1);
+
+	wait1Msec(350);
+	moveToPosition(0,1);
+
+	wait1Msec(350);
+	interact(0);
+
+	wait1Msec(350);
+	moveToPosition(1,2);
+
+	wait1Msec(350);
+	interact(1);
+
+	wait1Msec(350);
+	moveToPosition(1,0);
+
+	wait1Msec(350);
+	interact(0);
+
+	wait1Msec(350);
+	moveToPosition(0,1);
+
+	wait1Msec(350);
+	interact(1);
+
+	wait1Msec(350);
+	moveToPosition(1,2);
+
+	wait1Msec(350);
+	interact(0);
+
+	wait1Msec(350);
+	moveToPosition(ROBOT_POSITION_R,ROBOT_POSITION_C);
+
+
+	resetSystem();
 
 }

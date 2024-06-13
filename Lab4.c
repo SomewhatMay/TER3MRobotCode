@@ -30,8 +30,13 @@ task main() {
 		{2, 2, 180}
 	};
 
+	// int target[2][3] = {
+	// 	{0, 0, 90},
+	// 	{0, 2, 0}
+	// };
 
-	for (int i = 0; i < 3; i++) {
+
+	for (int i = 0; i < 2; i++) {
 		// Pick up the object
 		openClaw();
 		moveToPosition(target[i][0], target[i][1]);
@@ -39,23 +44,16 @@ task main() {
 		turnToPosition(target[i][2]);
 
 		wait1Msec(350);
-		closeClaw();
-
-		wait1Msec(350);
-
-		moveArm(400);
+		interact(1);
 
 		// Go to drop-off location
-		moveToPosition(target[i + 1][0], target[i + 1][1]);
+		moveToPosition(target[i + 1][0], target[i + 	1][1]);
 		wait1Msec(350);
 		turnToPosition(target[i + 1][2]);
 
 		// moveForward(10);
-		moveArm(-400);
-
 		wait1Msec(350);
-		openClaw();
-		wait1Msec(350);
+		interact(0);
 
 		// moveForward(-10);
 

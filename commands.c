@@ -21,8 +21,8 @@
 #define DRIVE_TRAIN_SPEED 50
 #define DRIVE_TRAIN_MULTIPLIER 0.83 // Linearly adjusts drivetrain delay
 #define MOTOR_COMPENSATION 1.095 // Applied to left motor asymmetry
-#define DRIVE_TRAIN_ANGLE 90 // Faces north - ASK MR MARIO
-#define TURN_RATIO 570
+#define DRIVE_TRAIN_ANGLE 0 // Faces north - ASK MR MARIO
+#define TURN_RATIO 600
 
 #define ARM_SPEED 50
 #define CLAW_SPEED 40
@@ -42,6 +42,10 @@ static int armPosition = 0;
 
 static int clawSpeed = 20;
 static int clawPosition = 0;
+
+void moveArm(int distance);
+void closeClaw();
+void openClaw();
 
 
 /*
@@ -118,7 +122,7 @@ void setRobotPosition(int r, int c) {
 void turn(int degrees) {
 	short direction = sign(degrees);
 	motor[rightMotor] = direction * -driveTrainSpeed;
-	motor[leftMotor] = direction * driveTrainSpeed;
+	motor[leftMotor] = direction * driveTrainSpeed * MOTOR_COMPENSATION;
 
 	wait1Msec(abs(degrees) * TURN_RATIO / driveTrainSpeed);
 	stopDriveTrain();
@@ -136,7 +140,7 @@ void turn(int degrees) {
 	This function yields.
 */
 void turnToPosition(int degrees) {
-	degrees = degrees % 360;
+	degrees = degrees;
 
 	int difference = degrees - driveTrainAngle;
 	turn(difference);
@@ -198,8 +202,32 @@ void moveToPosition(int row, int col) {
 	}
 
 	if (verticalDirection != 0) {
-		turnToPosition(verticalDirection )
+		turnToPosition(abs(verticalDirection - 1) * 90);
+		wait1Msec(350);
+		moveForward(abs(rowDifference) * SQUARE_SIZE);
+		wait1Msec(350);
 	}
+
+	setRobotPosition(row, col);
+}
+
+void interact(int pickup){
+	moveForward(10);
+	wait1Msec(350);
+	if (pickup){
+		closeClaw();
+		wait1Msec(350);
+		moveArm(400);
+		wait1Msec(350);
+	}
+	else {
+		moveArm(-400);
+		wait1Msec(350);
+		openClaw();
+		wait1Msec(350);
+	}
+	moveForward(-10);
+	wait1Msec(350);
 }
 
 
