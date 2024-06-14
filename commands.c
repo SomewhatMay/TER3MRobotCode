@@ -140,9 +140,10 @@ void turn(int degrees) {
 	This function yields.
 */
 void turnToPosition(int degrees) {
-	degrees = degrees;
-
 	int difference = degrees - driveTrainAngle;
+	if (abs(difference) > 180) {
+		difference = (360 - abs(difference)) * -sign(difference);
+	}
 	turn(difference);
 }
 

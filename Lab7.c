@@ -16,58 +16,35 @@
 #include "commands.c"
 
 task main() {
-	// Origin is top left.
-	// Points are represented as (y, x)
-
-	// Robot starting at (2, 1)
 	initializeSystem();
 
+    openClaw();
+    moveForward(100);
+    wait1Msec(350);
+    moveToPosition(90);
+    wait1Msec(350);
 
-	openClaw();
+    moveForward(100);
+    wait1Msec(350);
+    closeClaw();
+    moveArm(400);
 
-	wait1Msec(350);
-	moveToPosition(1,0);
+    moveForward(100);
+    wait1Msec(350);
+    moveToPosition(180);
+    wait1Msec(350);
+    
+    moveToPosition(270);
+    wait1Msec(350);
 
-	wait1Msec(350);
-	turnToPosition(90);
+    moveForward(190);
+    moveArm(-400);
+    wait1Msec(350);
+    openClaw();
+    moveArm(400);
 
-	wait1Msec(350);
-	interact(1);
-
-	wait1Msec(350);
-	moveToPosition(0,1);
-
-	wait1Msec(350);
-	interact(0);
-
-	wait1Msec(350);
-	moveToPosition(1,2);
-
-	wait1Msec(350);
-	interact(1);
-
-	wait1Msec(350);
-	moveToPosition(1,0);
-
-	wait1Msec(350);
-	interact(0);
-
-	wait1Msec(350);
-	moveToPosition(0,1);
-
-	wait1Msec(350);
-	interact(1);
-
-	wait1Msec(350);
-	moveToPosition(1,2);
-
-	wait1Msec(350);
-	interact(0);
-
-	wait1Msec(350);
-	moveToPosition(ROBOT_POSITION_R,ROBOT_POSITION_C);
-
+    moveToPosition(0);
+    moveArm(-400);
 
 	resetSystem();
-
 }
