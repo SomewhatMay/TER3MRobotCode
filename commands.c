@@ -148,47 +148,15 @@ void turnToPosition(int degrees) {
 }
 
 /*
-	Move the robot to position x, y in the smallest
+	Move the robot to position row, column in the smallest
 	amount of time.
 
 	This function yields.
 */
-void _moveToPosition(int c, int r) {
-	int rDifference = robotPositionR - r; // Since row starts at the top
-	int cDifference = c - robotPositionC;
-	int rDirection = sign(rDifference);
-	int cDirection = sign(cDifference);
-	int moveXFirst = 0;
-
-	if (cDirection == 1 && driveTrainAngle == 90 || cDirection == -1 && driveTrainAngle == 270) {
-		// we are alreadr facing the right c direction
-		moveXFirst = 1;
-	}
-
-	if (moveXFirst && cDirection != 0) {
-		// turnToPosition(cDirection * 90);
-		// wait1Msec(350);
-		moveForward(abs(cDifference) * SQUARE_SIZE);
-		wait1Msec(350);
-	}
-
-	if (rDirection != 0) {
-		turnToPosition((rDirection + 1) * 90);
-		wait1Msec(350);
-		moveForward(abs(rDifference) * SQUARE_SIZE);
-		wait1Msec(350);
-	}
-
-	if (!moveXFirst && cDirection != 0) {
-		turnToPosition(cDirection * 90);
-		wait1Msec(350);
-		moveForward(abs(cDifference) * SQUARE_SIZE);
-	}
-
-	setRobotPosition(r, c);
-}
-
 void moveToPosition(int row, int col) {
+	// Subtracting row from current row position
+	// will yield a positive rowDifference, which is ideal
+	// since y decreases as we move up.
 	int rowDifference = robotPositionR - row;
 	int colDifference = col - robotPositionC;
 	
