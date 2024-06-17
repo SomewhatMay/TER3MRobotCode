@@ -149,9 +149,11 @@ void turn(int degrees) {
 */
 void turnToPosition(int degrees) {
 	int difference = degrees - driveTrainAngle;
+	
 	if (abs(difference) > 180) {
 		difference = (360 - abs(difference)) * -sign(difference);
 	}
+
 	turn(difference);
 }
 
@@ -198,18 +200,19 @@ void moveToPosition(int row, int col) {
 void interact(int pickup){
 	moveForward(10);
 	wait1Msec(350);
+
 	if (pickup){
 		closeClaw();
 		wait1Msec(350);
 		moveArm(400);
 		wait1Msec(350);
-	}
-	else {
+	} else {
 		moveArm(-400);
 		wait1Msec(350);
 		openClaw();
 		wait1Msec(350);
 	}
+
 	moveForward(-10);
 	wait1Msec(350);
 }
@@ -235,8 +238,7 @@ void stopArm() {
 
 	This function yields.
 */
-void moveArm(int distance){
-	// Negative armSpeed ensures motor moves up.
+void moveArm(int distance) {
 	motor[armMotor] = armSpeed * sign(distance);
 	wait1Msec(abs(distance));
 	stopArm();
